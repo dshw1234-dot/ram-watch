@@ -1,0 +1,15 @@
+{
+  "name": "ram-watch",
+  "description": "RAM Watch, a Claude Code mod that shows how much memory the Claude desktop app uses and restarts it.",
+  "owner": {
+    "name": "이원찬",
+    "url": "https://github.com/dshw1234-dot"
+  },
+  "plugins": [
+    {
+      "name": "ram-watch",
+      "source": "./",
+      "description": "A side panel that shows how much memory the Claude desktop app, its Cowork virtual machine and each session use, with a button to restart the app (Windows)."
+    }
+  ]
+}

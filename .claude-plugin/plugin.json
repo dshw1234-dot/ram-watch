@@ -1,0 +1,17 @@
+{
+  "name": "ram-watch",
+  "displayName": "RAM Watch",
+  "version": "0.1.0",
+  "description": "A side panel that shows how much memory the Claude desktop app, its Cowork virtual machine and each session use, with a button to restart the app (Windows).",
+  "author": {
+    "name": "이원찬",
+    "url": "https://github.com/dshw1234-dot"
+  },
+  "homepage": "https://github.com/dshw1234-dot/ram-watch",
+  "repository": "https://github.com/dshw1234-dot/ram-watch",
+  "license": "MIT",
+  "privacyPolicyUrl": "https://github.com/dshw1234-dot/ram-watch#what-it-reads-and-sends",
+  "supportUrl": "https://github.com/dshw1234-dot/ram-watch/issues",
+  "documentationUrl": "https://github.com/dshw1234-dot/ram-watch#readme",
+  "types": "./types/index.d.ts"
+}
