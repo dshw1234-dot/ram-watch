@@ -64,10 +64,23 @@ The first press asks for a second within 5 seconds. Then a separate PowerShell, 
 
 ## What it reads and sends
 
-- Reads the list of processes on this PC and the total amount of memory, through PowerShell and WMI.
-- Reads the current session's title with the app's `get_session` tool, only if that tool is already allowed (no permission prompt).
-- Writes two small files to `%TEMP%\claude-ram-watch\`, and saves the language and button choices in the mod's own store.
-- Sends nothing over the network.
+Nothing leaves your PC: the mod makes no network requests and talks to no server.
+
+**Programs it starts.** Only Windows PowerShell (`powershell.exe -NoProfile -NonInteractive -EncodedCommand ...`), with three scripts written as fixed text in `hooks/register.tsx`:
+
+| Script | When | What it does |
+| --- | --- | --- |
+| `MEASURE` | every 30 seconds, by one session at a time | reads the process list (`Get-CimInstance Win32_Process`) and the PC's total memory, and prints the sums as JSON |
+| `FIND_SELF` | once per session | walks up from its own process to find this session's `claude.exe` |
+| `RESTART_INNER` (through `launcher`) | only after you press **Restart app** twice | starts a separate hidden PowerShell through WMI (`Win32_Process.Create`) that stops the Claude app and its sessions (`Stop-Process`), runs `sc.exe stop` and `sc.exe start CoworkVMService`, and opens the app again (`shell:AppsFolder\Claude_pzs8sxrjxfjjc!Claude`) |
+
+The scripts are base64-encoded only so that quotes survive the Windows command line; the plain text is in the source.
+
+**Files it writes.** Only `%TEMP%\claude-ram-watch\snap.json` (the latest sums) and `%TEMP%\claude-ram-watch\claim.json` (a timestamp saying a session is measuring). No other program reads or runs them. The language and the hide-button choice go in the mod's own store.
+
+**Tools it calls by itself.** At session start, `mcp__ccd_session_mgmt__get_session` with `session_id: "self"`, to show the current session's title. It calls it only if the tool is already allowed (it checks first, so no permission prompt appears), and the title stays in the panel.
+
+**Events it hooks.** `session.start` (registers `/ram-watch` and starts the 30-second timer), `command.run` for `/ram-watch`, `ui.close` for its own panel (it notes that the panel closed and passes the close on unchanged), and `ui.render` to draw the panel and the button below the prompt (other mods' buttons stay as they are).
 
 ## Also by the author
 
